@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { Observable, interval } from 'rxjs';
+import { map, retry, take, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-rxjs',
@@ -9,8 +9,28 @@ import { retry } from 'rxjs/operators';
 })
 export class RxjsComponent {
   constructor() {
-    const obs$ = new Observable((observer) => {
-      let i = 0;
+    // this.retornaUnObservable().subscribe(
+    //   (valor) => console.log('subs:', valor),
+    //   (err) => console.warn('Error', err),
+    //   () => console.info('Obs$ terminado')
+    // );
+
+    this.retornaIntevalo().subscribe((valor) => console.log(valor));
+  }
+
+  retornaIntevalo(): Observable<number> {
+    return interval(500).pipe(
+      map((valor) => {
+        return valor + 1;
+      }),
+      filter((valor) => (valor % 2 === 0 ? true : false)),
+      take(10)
+    );
+  }
+
+  retornaUnObservable(): Observable<number> {
+    let i = 0;
+    return new Observable<number>((observer) => {
       const intervalo = setInterval(() => {
         i++;
         observer.next(i);
@@ -20,17 +40,10 @@ export class RxjsComponent {
           observer.complete();
         }
 
-        if (i === 3) {
-          i = 0;
+        if (i === 2) {
           observer.error('i llego a 2');
         }
       }, 1000);
     });
-
-    obs$.pipe(retry(1)).subscribe(
-      (valor) => console.log('subs:', valor),
-      (err) => console.warn('Error', err),
-      () => console.info('Obs$ terminado')
-    );
   }
 }
