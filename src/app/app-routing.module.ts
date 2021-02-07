@@ -1,20 +1,31 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { NopagefoundComponent } from './404/nopagefound.component';
+import { RouterModule, Routes } from '@angular/router';
+
+// Modulos
 import { PagesRoutingModule } from './pages/pages.routing';
 import { AuthRoutingModule } from './auth/auth.routing';
 
+import { NopagefoundComponent } from './nopagefound/nopagefound.component';
+
+
 const routes: Routes = [
+
+  // path: '/dashboard' PagesRouting
+  // path: '/auth' AuthRouting
+  // path: '/medicos' MedicosRouting
+  // path: '/compras' ComprasRouting
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', component: NopagefoundComponent },
 ];
 
+
+
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot( routes ),
     PagesRoutingModule,
-    AuthRoutingModule,
+    AuthRoutingModule
   ],
-  exports: [RouterModule],
+  exports: [ RouterModule ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
